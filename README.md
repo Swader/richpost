@@ -22,3 +22,4 @@ Accepting pull requests. Go crazy.
  - fix highlighting, it selects oddly arbitrary languages right now.
  - option to choose highlight theme (all are packed in the extension by default, just needs a switch of some kind)
  - stop intervals when tab is inactive
+ - MD in comments?
