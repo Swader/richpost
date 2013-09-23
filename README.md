@@ -24,3 +24,6 @@ Accepting pull requests. Go crazy.
  - stop intervals when tab is inactive
  - MD in embedded posts
  - MD in comments?
+ - keep +mentions alive, currently turned into pure text
+ - add preview while writing
+ - add draft auto save (local storage?)
