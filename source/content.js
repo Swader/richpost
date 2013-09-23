@@ -77,6 +77,9 @@ function findHashTags() {
     if (postsContainer === undefined || postsContainer === null) {
         postsContainer = document.getElementsByClassName('ow')[0];
     }
+    if (postsContainer === undefined || !postsContainer) {
+        postsContainer = document.body;
+    }
     var evalString = '//a[@class="ot-hashtag" and text()="#richpost"]';
     return document.evaluate(evalString, postsContainer, null, xpo);
 }
