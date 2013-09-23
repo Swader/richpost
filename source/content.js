@@ -25,44 +25,34 @@ marked.setOptions({
 });
 
 /**
- * Init flags for added listeners to sharebox controls. This will serve to refresh the MD after an edit or post.
- * @type {{Save: boolean, Cancel: boolean}}
- */
-var listenersAdded = {
-    Save: false,
-    Cancel: false
-};
-
-/**
  * Re-runs the MD over all posts on edit or cancel, to make sure the posts are all rendered up to date
  * It also resets event listeners to avoid duplicates
  * @param e
  */
 function resetProcessed(e) {
     processedPosts = {};
-    listenersAdded.Save = false;
-    listenersAdded.Cancel = false;
-    e.target.removeEventListener('click', resetProcessed);
 }
 
 /**
  * Fetches the Share/Save and Cancel buttons from the Sharebox and binds resetProcessed() to their click
  */
 function restoreListeners() {
-    var scope = document.evaluate('//div[@guidedhelpid="shareboxcontrols"]', document, null, xpo).snapshotItem(0);
-    if (scope !== null && scope !== undefined && processedPosts != {}) {
-        var buttons = document.evaluate('//div[@role="button"]', scope, null, xpo);
-        if (buttons.snapshotItem(0) && !listenersAdded.Save) {
-            buttons.snapshotItem(0).addEventListener('click', resetProcessed);
-            listenersAdded.Save = true;
-        }
-        if (buttons.snapshotItem(1) && !listenersAdded.Cancel) {
-            buttons.snapshotItem(1).addEventListener('click', resetProcessed);
-            listenersAdded.Cancel = true;
+    var scope = document.evaluate('//div[@guidedhelpid="shareboxcontrols"]', document, null, xpo);
+    for (var i = 0; i < scope.snapshotLength; i++) {
+        if (scope.snapshotItem(i) !== undefined && processedPosts != {}) {
+            var context = scope.snapshotItem(i);
+            var buttons = document.evaluate('//div[@role="button" and (text() = "Save" or text() = "Share")]', context, null, xpo);
+            for (var j = 0; j < buttons.snapshotLength; j++) {
+                if (buttons.snapshotItem(j)) {
+                    buttons.snapshotItem(j).addEventListener('click', resetProcessed);
+                }
+            }
         }
     }
 }
-restoreListeners();
+setInterval(function () {
+    restoreListeners();
+}, 1000);
 
 /**
  * Check for MD-able posts every 2 seconds
